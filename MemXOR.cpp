@@ -30,7 +30,11 @@
 using namespace cat;
 
 #ifdef CAT_HAS_VECTOR_EXTENSIONS
+#ifdef CAT_WORD_64
 typedef u64 vec_block CAT_VECTOR_SIZE(u64, 16);
+#else
+typedef u32 vec_block CAT_VECTOR_SIZE(u32, 16);
+#endif
 #endif
 
 void cat::memxor(void * CAT_RESTRICT voutput, const void * CAT_RESTRICT vinput, int bytes)
@@ -90,8 +94,13 @@ void cat::memxor(void * CAT_RESTRICT voutput, const void * CAT_RESTRICT vinput, 
 			bytes -= 128;
 		}
 
+		#ifdef CAT_WORD_64
 		output_w = (u64 * CAT_RESTRICT)out_block;
 		input_w = (u64 * CAT_RESTRICT)in_block;
+		#else
+		output_w = (u32 * CAT_RESTRICT)out_block;
+		input_w = (u32 * CAT_RESTRICT)in_block;
+		#endif
 	}
 #endif
 
@@ -184,10 +193,15 @@ void cat::memxor_set(void * CAT_RESTRICT voutput, const void * CAT_RESTRICT va, 
 			*out_block++ = *in_block1++ ^ *in_block2++;
 			bytes -= 128;
 		}
-
+#ifdef CAT_WORD_64
 		output_w = (u64 * CAT_RESTRICT)out_block;
 		a_w = (u64 * CAT_RESTRICT)in_block1;
 		b_w = (u64 * CAT_RESTRICT)in_block2;
+#else
+		output_w = (u32 * CAT_RESTRICT)out_block;
+		a_w = (u32 * CAT_RESTRICT)in_block1;
+		b_w = (u32 * CAT_RESTRICT)in_block2;
+#endif
 	}
 #endif
 
@@ -282,9 +296,15 @@ void cat::memxor_add(void * CAT_RESTRICT voutput, const void * CAT_RESTRICT va, 
 			bytes -= 128;
 		}
 
+#ifdef CAT_WORD_64
 		output_w = (u64 * CAT_RESTRICT)out_block;
 		a_w = (u64 * CAT_RESTRICT)in_block1;
 		b_w = (u64 * CAT_RESTRICT)in_block2;
+#else
+		output_w = (u32 * CAT_RESTRICT)out_block;
+		a_w = (u32 * CAT_RESTRICT)in_block1;
+		b_w = (u32 * CAT_RESTRICT)in_block2;
+#endif
 	}
 #endif
 
